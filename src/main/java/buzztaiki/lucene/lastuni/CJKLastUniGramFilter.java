@@ -23,6 +23,7 @@ import org.apache.lucene.analysis.TokenFilter;
 import org.apache.lucene.analysis.cjk.CJKTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
+import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
 
 /**
  * Tokenize last CJK words as uni-gram.
@@ -32,19 +33,24 @@ import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
  */
 public final class CJKLastUniGramFilter extends TokenFilter {
     private static enum State {
-        NONE, TOKENED, UNI, LAST
+        INHERIT, UNIGRAM, LAST
     }
+
+    private static final String DOUBLE_TYPE = "double";
 
     private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
     private final OffsetAttribute offsetAtt = addAttribute(OffsetAttribute.class);
+    private final TypeAttribute typeAtt = addAttribute(TypeAttribute.class);
+
     private char[] lastBuffer;
     private State state;
     private int lastStart;
     private int lastEnd;
+    private String lastType;
 
     public CJKLastUniGramFilter(CJKTokenizer input) {
         super(input);
-        state = State.NONE;
+        _reset();
     }
 
     @Override
@@ -52,42 +58,34 @@ public final class CJKLastUniGramFilter extends TokenFilter {
         if (state == State.LAST) {
             return false;
         }
-
-        if (state == State.UNI) {
-            state = State.NONE;
+        if (state == State.UNIGRAM) {
+            state = State.INHERIT;
             clearAttributes();
             termAtt.copyBuffer(lastBuffer, 0, lastEnd - lastStart);
             offsetAtt.setOffset(lastStart, lastEnd);
+            typeAtt.setType(lastType);
         } else {
-            boolean continuous = input.incrementToken();
-            if (!continuous && state != State.TOKENED) {
-                return false;
-            }
-
+            boolean cont = input.incrementToken();
             char[] buffer = termAtt.buffer().clone();
             int start = offsetAtt.startOffset();
             int end = offsetAtt.endOffset();
-            Character.UnicodeBlock ub = Character.UnicodeBlock.of(buffer[0]);
-            if (!continuous
-                    || ub == Character.UnicodeBlock.BASIC_LATIN
-                    || ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS
-                    || end - start == 1) {
-                if (state == State.TOKENED) {
-                    state = (continuous ? State.UNI : State.LAST);
-                    clearAttributes();
-                    termAtt.copyBuffer(lastBuffer, 1, 1);
-                    offsetAtt.setOffset(lastStart + 1, lastStart + 2);
-                } else {
-                    state = State.NONE;
-                }
-                lastBuffer = buffer;
-                lastStart = start;
-                lastEnd = end;
+            String type = typeAtt.type();
+
+            if (lastType.equals(DOUBLE_TYPE)
+                    && lastEnd - lastStart >= 2
+                    && (!cont || start >= lastEnd)) {
+                state = (cont ? State.UNIGRAM : State.LAST);
+                clearAttributes();
+                termAtt.copyBuffer(lastBuffer, lastEnd-lastStart-1, 1);
+                offsetAtt.setOffset(lastEnd-1, lastEnd);
+                typeAtt.setType(DOUBLE_TYPE);
+                setLastValues(buffer, start, end, type);
             } else {
-                state = State.TOKENED;
-                lastBuffer = termAtt.buffer().clone();
-                lastStart = start;
-                lastEnd = end;
+                if (!cont) {
+                    return false;
+                }
+                state = State.INHERIT;
+                setLastValues(buffer, start, end, type);
             }
         }
         return true;
@@ -96,6 +94,18 @@ public final class CJKLastUniGramFilter extends TokenFilter {
     @Override
     public void reset() throws IOException {
         super.reset();
-        state = State.NONE;
+        _reset();
+    }
+
+    private void setLastValues(char[] buffer, int start, int end, String type) {
+        lastBuffer = buffer;
+        lastStart = start;
+        lastEnd = end;
+        lastType = type;
+    }
+
+    private void _reset() {
+        state = State.INHERIT;
+        setLastValues(null, -1, -1, "");
     }
 }

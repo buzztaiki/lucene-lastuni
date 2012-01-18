@@ -74,4 +74,15 @@ public class CJKLastUniGramFilterTest extends BaseTokenStreamTestCase {
             8
         );
     }
+
+    public void testSingleTokenTwice() throws Exception {
+        TokenStream ts = new CJKLastUniGramFilter(new CJKTokenizer(new StringReader("あい うえ")));
+        assertTokenStreamContents(ts,
+            new String[]{"あい", "い", "うえ", "え"}, 
+            new int[]   {0,      1,    3,      4},
+            new int[]   {2,      2,    5,      5},
+            5
+        );
+    }
+
 }
