@@ -64,4 +64,14 @@ public class CJKLastUniGramFilterTest extends BaseTokenStreamTestCase {
             2
         );
     }
+
+    public void testAsciiAndCJK() throws Exception {
+        TokenStream ts = new CJKLastUniGramFilter(new CJKTokenizer(new StringReader("あいabcうえお")));
+        assertTokenStreamContents(ts,
+            new String[]{"あい", "い", "abc", "うえ", "えお", "お"}, 
+            new int[]   {0,      1, 2, 5, 6, 7},
+            new int[]   {2,      2, 5, 7, 8, 8},
+            8
+        );
+    }
 }
