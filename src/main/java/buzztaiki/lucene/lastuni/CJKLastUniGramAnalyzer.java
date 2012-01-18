@@ -26,6 +26,8 @@ import org.apache.lucene.analysis.StopwordAnalyzerBase;
 import org.apache.lucene.analysis.cjk.CJKAnalyzer;
 import org.apache.lucene.analysis.cjk.CJKTokenizer;
 import org.apache.lucene.util.Version;
+import org.apache.lucene.analysis.TokenStream;
+import java.io.IOException;
 
 
 /**
@@ -60,6 +62,6 @@ public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
         CJKTokenizer source = new CJKTokenizer(reader);
         return new TokenStreamComponents(
             source,
-            new StopFilter(matchVersion, new CJKLastUniGramFilter(new CJKTokenizer(reader)), stopwords));
+            new StopFilter(matchVersion, new CJKLastUniGramFilter(source), stopwords));
     }
 }
