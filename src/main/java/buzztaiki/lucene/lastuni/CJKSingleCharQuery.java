@@ -1,0 +1,56 @@
+package buzztaiki.lucene.lastuni;
+
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.PrefixQuery;
+import org.apache.lucene.queryParser.QueryParser;
+
+/**
+ * A query that matches CJK single character.
+ *
+ * <p>If you want to use this query, you can custmoize {@link QueryParser} as follows:
+ * <pre>
+ * private static class MyQueryParser extends QueryParser {
+ *     public MyQueryParser(Version matchVersion, String f, Analyzer a) {
+ *         super(matchVersion, f, a);
+ *     }
+ *     &commat;Override
+ *     public Query newTermQuery(Term term) {
+ *         if (CJKSingleCharQuery.allowed(term)) {
+ *             return CJKSingleCharQuery.of(term);
+ *         } else {
+ *             return super.newTermQuery(term);
+ *         }
+ *     }
+ * }
+ * </pre>
+ */
+public final class CJKSingleCharQuery {
+    private CJKSingleCharQuery() {}
+    
+    /**
+     * Return true if term is CJK single character.
+     */
+    public static boolean allowed(Term term) {
+        if (term.text().length() != 1) {
+            return false;
+        }
+        char c = term.text().charAt(0);
+        Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
+        if (ub == Character.UnicodeBlock.BASIC_LATIN || ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS) {
+            return false;
+        }
+        return Character.isLetter(c);
+    }
+
+    /**
+     * Return query that searches CJK single character.
+     * @throws IllegalArgumentException If term is not single CJK character.
+     */
+    public static Query of(Term term) throws IllegalArgumentException {
+        if (!allowed(term)) {
+            throw new IllegalArgumentException(term.text() + " is not allowed");
+        }
+        return new PrefixQuery(term);
+    }
+}

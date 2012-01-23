@@ -38,10 +38,11 @@ import org.apache.solr.analysis.BaseTokenFilterFactory;
  * </pre>
  */
 public final class CJKLastUniGramFilterFactory extends BaseTokenFilterFactory {
-  public CJKLastUniGramFilter create(TokenStream in) {
-      if (!(in instanceof CJKTokenizer)) {
-          throw new IllegalArgumentException("Intput token stream should be CJKTokenizer");
-      }
-      return new CJKLastUniGramFilter((CJKTokenizer) in);
-  }
+    @Override
+    public CJKLastUniGramFilter create(TokenStream in) {
+        if (!(in instanceof CJKTokenizer)) {
+            throw new IllegalArgumentException("Intput token stream should be CJKTokenizer");
+        }
+        return new CJKLastUniGramFilter((CJKTokenizer) in);
+    }
 }
