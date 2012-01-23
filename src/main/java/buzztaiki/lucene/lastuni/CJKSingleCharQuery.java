@@ -7,23 +7,6 @@ import org.apache.lucene.queryParser.QueryParser;
 
 /**
  * A query that matches CJK single character.
- *
- * <p>If you want to use this query, you can custmoize {@link QueryParser} as follows:
- * <pre>
- * private static class MyQueryParser extends QueryParser {
- *     public MyQueryParser(Version matchVersion, String f, Analyzer a) {
- *         super(matchVersion, f, a);
- *     }
- *     &commat;Override
- *     public Query newTermQuery(Term term) {
- *         if (CJKSingleCharQuery.allowed(term)) {
- *             return CJKSingleCharQuery.of(term);
- *         } else {
- *             return super.newTermQuery(term);
- *         }
- *     }
- * }
- * </pre>
  */
 public final class CJKSingleCharQuery {
     private CJKSingleCharQuery() {}

@@ -8,8 +8,8 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
@@ -21,22 +21,7 @@ import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.LuceneTestCase;
 import org.apache.lucene.util.Version;
 
-
 public class CJKSingleCharQueryTest extends LuceneTestCase {
-    private static class TestQueryParser extends QueryParser {
-        public TestQueryParser(Version matchVersion, String f, Analyzer a) {
-            super(matchVersion, f, a);
-        }
-        @Override
-        public Query newTermQuery(Term term) {
-            if (CJKSingleCharQuery.allowed(term)) {
-                return CJKSingleCharQuery.of(term);
-            } else {
-                return super.newTermQuery(term);
-            }
-        }
-    }
-
     private IndexWriter newWriter(Directory dir, Analyzer analyzer) throws IOException {
         return new IndexWriter(dir,
             new IndexWriterConfig(TEST_VERSION_CURRENT, analyzer)
@@ -60,7 +45,7 @@ public class CJKSingleCharQueryTest extends LuceneTestCase {
     }
 
     private QueryParser newQueryParser(Analyzer analyzer) {
-        QueryParser qp = new TestQueryParser(TEST_VERSION_CURRENT, "content", analyzer);
+        QueryParser qp = new CJKSingleCharSupportQueryParser(TEST_VERSION_CURRENT, "content", analyzer);
         qp.setDefaultOperator(QueryParser.AND_OPERATOR);
         qp.setAutoGeneratePhraseQueries(true);
         qp.setAllowLeadingWildcard(true);
