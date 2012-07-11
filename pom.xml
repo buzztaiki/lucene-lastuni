@@ -3,7 +3,7 @@
 
   <groupId>buzztaiki.lucene.lastuni</groupId>
   <artifactId>lucene-lastuni</artifactId>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.1</version>
   <packaging>jar</packaging>
 
   <name>lucene-lastuni</name>
