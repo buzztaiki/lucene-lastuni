@@ -65,14 +65,14 @@ public class CJKSingleCharQueryTest extends LuceneTestCase {
 
 
     private RAMDirectory dir;
-    private CJKAnalyzer analyzer;
+    private CJKLastUniGramAnalyzer analyzer;
     private CJKLastUniGramAnalyzer uniAnalyzer;
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
         dir = new RAMDirectory();
-        analyzer = new CJKAnalyzer(TEST_VERSION_CURRENT);
+        analyzer = new CJKLastUniGramAnalyzer(TEST_VERSION_CURRENT, false);
         uniAnalyzer = new CJKLastUniGramAnalyzer(TEST_VERSION_CURRENT);
     }
 
@@ -89,6 +89,24 @@ public class CJKSingleCharQueryTest extends LuceneTestCase {
         assertEquals(1, search(dir, analyzer, "い").totalHits);
         assertEquals(1, search(dir, analyzer, "う").totalHits);
     }
+
+    public void testあいうえお() throws Exception {
+        addDoc(dir, uniAnalyzer, "あいうえお");
+        assertEquals(1, search(dir, analyzer, "あいう").totalHits);
+        assertEquals(1, search(dir, analyzer, "あ").totalHits);
+        assertEquals(1, search(dir, analyzer, "い").totalHits);
+        assertEquals(1, search(dir, analyzer, "う").totalHits);
+    }
+
+    public void test文書B編集() throws Exception {
+        addDoc(dir, uniAnalyzer, "文書B編集");
+        assertEquals(1, search(dir, analyzer, "文書B編集").totalHits);
+        assertEquals(1, search(dir, analyzer, "文書").totalHits);
+        assertEquals(1, search(dir, analyzer, "文書B").totalHits);
+        assertEquals(1, search(dir, analyzer, "編集").totalHits);
+        assertEquals(1, search(dir, analyzer, "B編集").totalHits);
+    }
+
 
     public void test柳_あいう() throws Exception {
         addDoc(dir, uniAnalyzer, "柳 あいう");
