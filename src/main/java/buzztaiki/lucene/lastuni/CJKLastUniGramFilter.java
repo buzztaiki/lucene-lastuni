@@ -47,10 +47,16 @@ public final class CJKLastUniGramFilter extends TokenFilter {
     private int lastStart;
     private int lastEnd;
     private String lastType;
+    private boolean tokenizeLastUni;
 
     public CJKLastUniGramFilter(CJKTokenizer input) {
+        this(input, true);
+    }
+
+    public CJKLastUniGramFilter(CJKTokenizer input, boolean tokenizeLastUni) {
         super(input);
         _reset();
+        this.tokenizeLastUni = tokenizeLastUni;
     }
 
     @Override
@@ -75,11 +81,13 @@ public final class CJKLastUniGramFilter extends TokenFilter {
                     && lastEnd - lastStart >= 2
                     && (!cont || start >= lastEnd)) {
                 state = (cont ? State.UNIGRAM : State.LAST);
-                clearAttributes();
-                termAtt.copyBuffer(lastBuffer, lastEnd-lastStart-1, 1);
-                offsetAtt.setOffset(lastEnd-1, lastEnd);
-                typeAtt.setType(DOUBLE_TYPE);
-                setLastValues(buffer, start, end, type);
+                if (tokenizeLastUni || state != State.LAST ) {
+                    clearAttributes();
+                    termAtt.copyBuffer(lastBuffer, lastEnd-lastStart-1, 1);
+                    offsetAtt.setOffset(lastEnd-1, lastEnd);
+                    typeAtt.setType(DOUBLE_TYPE);
+                    setLastValues(buffer, start, end, type);
+                }
             } else {
                 if (!cont) {
                     return false;

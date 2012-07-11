@@ -36,6 +36,8 @@ import java.io.IOException;
  *
  */
 public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
+    private boolean tokenizeLastUni = true;
+
     /**
      * Builds an analyzer which removes words in {@link CJKAnalyzer#getDefaultStopSet()}.
      */
@@ -52,7 +54,35 @@ public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
      *          a stopword set
      */
     public CJKLastUniGramAnalyzer(Version matchVersion, Set<?> stopwords){
+        this(matchVersion, stopwords, true);
+    }
+
+
+    /**
+     * Builds an analyzer with the given stop words
+     * 
+     * @param matchVersion
+     *          lucene compatibility version
+     * @param tokenzieLastUni
+     *          flag to tokenize last charctor. use for search
+     */
+    public CJKLastUniGramAnalyzer(Version matchVersion, boolean tokenizeLastUni){
+        this(matchVersion, CJKAnalyzer.getDefaultStopSet(), tokenizeLastUni);
+    }
+
+    /**
+     * Builds an analyzer with the given stop words
+     * 
+     * @param matchVersion
+     *          lucene compatibility version
+     * @param stopwords
+     *          a stopword set
+     * @param tokenzieLastUni
+     *          flag to tokenize last charctor. use for search
+     */
+    public CJKLastUniGramAnalyzer(Version matchVersion, Set<?> stopwords, boolean tokenizeLastUni){
         super(matchVersion, stopwords);
+        this.tokenizeLastUni = tokenizeLastUni;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -62,6 +92,6 @@ public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
         CJKTokenizer source = new CJKTokenizer(reader);
         return new TokenStreamComponents(
             source,
-            new StopFilter(matchVersion, new CJKLastUniGramFilter(source), stopwords));
+            new StopFilter(matchVersion, new CJKLastUniGramFilter(source, tokenizeLastUni), stopwords));
     }
 }
