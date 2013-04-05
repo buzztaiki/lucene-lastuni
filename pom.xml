@@ -11,7 +11,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <lucene.version>3.5.0</lucene.version>
+    <lucene.version>3.6.2</lucene.version>
   </properties>
 
   <scm>
@@ -36,7 +36,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.7</version>
+      <version>4.11</version>
     </dependency>
     <dependency>
       <groupId>org.apache.lucene</groupId>
