@@ -63,8 +63,8 @@ public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
      * 
      * @param matchVersion
      *          lucene compatibility version
-     * @param tokenzieLastUni
-     *          flag to tokenize last charctor. use for search
+     * @param tokenizeLastUni
+     *          flag to tokenize last charcter. use for search
      */
     public CJKLastUniGramAnalyzer(Version matchVersion, boolean tokenizeLastUni){
         this(matchVersion, CJKAnalyzer.getDefaultStopSet(), tokenizeLastUni);
@@ -77,8 +77,8 @@ public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
      *          lucene compatibility version
      * @param stopwords
      *          a stopword set
-     * @param tokenzieLastUni
-     *          flag to tokenize last charctor. use for search
+     * @param tokenizeLastUni
+     *          flag to tokenize last charcter. use for search
      */
     public CJKLastUniGramAnalyzer(Version matchVersion, Set<?> stopwords, boolean tokenizeLastUni){
         super(matchVersion, stopwords);
