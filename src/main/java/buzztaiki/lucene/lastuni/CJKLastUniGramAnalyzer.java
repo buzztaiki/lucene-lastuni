@@ -20,14 +20,15 @@ package buzztaiki.lucene.lastuni;
 import java.io.Reader;
 import java.util.Set;
 
+import java.io.IOException;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.StopFilter;
-import org.apache.lucene.analysis.StopwordAnalyzerBase;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.cjk.CJKAnalyzer;
 import org.apache.lucene.analysis.cjk.CJKTokenizer;
+import org.apache.lucene.analysis.core.StopFilter;
+import org.apache.lucene.analysis.util.CharArraySet;
+import org.apache.lucene.analysis.util.StopwordAnalyzerBase;
 import org.apache.lucene.util.Version;
-import org.apache.lucene.analysis.TokenStream;
-import java.io.IOException;
 
 
 /**
@@ -53,7 +54,7 @@ public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
      * @param stopwords
      *          a stopword set
      */
-    public CJKLastUniGramAnalyzer(Version matchVersion, Set<?> stopwords){
+    public CJKLastUniGramAnalyzer(Version matchVersion, CharArraySet stopwords){
         this(matchVersion, stopwords, true);
     }
 
@@ -80,7 +81,7 @@ public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
      * @param tokenizeLastUni
      *          flag to tokenize last charcter. use for search
      */
-    public CJKLastUniGramAnalyzer(Version matchVersion, Set<?> stopwords, boolean tokenizeLastUni){
+    public CJKLastUniGramAnalyzer(Version matchVersion, CharArraySet stopwords, boolean tokenizeLastUni){
         super(matchVersion, stopwords);
         this.tokenizeLastUni = tokenizeLastUni;
     }

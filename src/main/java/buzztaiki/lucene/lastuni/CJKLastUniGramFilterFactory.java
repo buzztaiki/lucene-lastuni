@@ -17,11 +17,11 @@ package buzztaiki.lucene.lastuni;
  * limitations under the License.
  */
 
-import java.io.IOException;
+import java.util.Map;
 
-import org.apache.lucene.analysis.cjk.CJKTokenizer;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.solr.analysis.BaseTokenFilterFactory;
+import org.apache.lucene.analysis.cjk.CJKTokenizer;
+import org.apache.lucene.analysis.util.TokenFilterFactory;
 
 /**
  * Creates new instances of {@link CJKLastUniGramFilter} for Solr.
@@ -37,7 +37,11 @@ import org.apache.solr.analysis.BaseTokenFilterFactory;
  * &lt;/fieldType&gt;
  * </pre>
  */
-public final class CJKLastUniGramFilterFactory extends BaseTokenFilterFactory {
+public final class CJKLastUniGramFilterFactory extends TokenFilterFactory {
+    public CJKLastUniGramFilterFactory(Map<String,String> args) {
+        super(args);
+    }
+
     @Override
     public CJKLastUniGramFilter create(TokenStream in) {
         if (!(in instanceof CJKTokenizer)) {

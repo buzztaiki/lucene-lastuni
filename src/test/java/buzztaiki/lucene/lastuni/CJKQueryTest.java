@@ -10,8 +10,8 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
@@ -29,7 +29,7 @@ public class CJKQueryTest extends LuceneTestCase {
 
     private void addDoc(IndexWriter writer, String content) throws IOException {
         Document doc = new Document();
-        doc.add(newField("content", content, Field.Store.YES, Field.Index.ANALYZED));
+        doc.add(newTextField("content", content, Field.Store.YES));
         writer.addDocument(doc);
     }
     
@@ -44,6 +44,7 @@ public class CJKQueryTest extends LuceneTestCase {
     }
 
     private QueryParser newQueryParser(Analyzer analyzer) {
+        // TODO: use flexible parser?
         QueryParser qp = new QueryParser(
             TEST_VERSION_CURRENT,
             "content",
@@ -61,7 +62,7 @@ public class CJKQueryTest extends LuceneTestCase {
             Query q = qp.parse(query);
             return searcher.search(q, 10);
         } finally {
-            searcher.close();
+            searcher.getIndexReader().close();
         }
     }
 
