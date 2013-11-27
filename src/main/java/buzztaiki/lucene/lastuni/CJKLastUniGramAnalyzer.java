@@ -41,27 +41,7 @@ import org.apache.lucene.util.Version;
  * stopwords with {@link StopFilter}
  */
 public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
-    private boolean tokenizeLastUni = true;
-
-    /**
-     * Builds an analyzer which removes words in {@link CJKAnalyzer#getDefaultStopSet()}.
-     */
-    public CJKLastUniGramAnalyzer(Version matchVersion) {
-        this(matchVersion, CJKAnalyzer.getDefaultStopSet());
-    }
-
-    /**
-     * Builds an analyzer with the given stop words
-     *
-     * @param matchVersion
-     *          lucene compatibility version
-     * @param stopwords
-     *          a stopword set
-     */
-    public CJKLastUniGramAnalyzer(Version matchVersion, CharArraySet stopwords){
-        this(matchVersion, stopwords, true);
-    }
-
+    private final boolean tokenizeLastUni;
 
     /**
      * Builds an analyzer which removes words in {@link CJKAnalyzer#getDefaultStopSet()}.
@@ -69,7 +49,7 @@ public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
      * @param matchVersion
      *          lucene compatibility version
      * @param tokenizeLastUni
-     *          flag to tokenize last charcter. use for search
+     *          flag to tokenize last charcter. set this to false when search
      */
     public CJKLastUniGramAnalyzer(Version matchVersion, boolean tokenizeLastUni){
         this(matchVersion, CJKAnalyzer.getDefaultStopSet(), tokenizeLastUni);
@@ -83,7 +63,7 @@ public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
      * @param stopwords
      *          a stopword set
      * @param tokenizeLastUni
-     *          flag to tokenize last charcter. use for search
+     *          flag to tokenize last charcter. set this to false when search
      */
     public CJKLastUniGramAnalyzer(Version matchVersion, CharArraySet stopwords, boolean tokenizeLastUni){
         super(matchVersion, stopwords);
@@ -98,7 +78,7 @@ public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
         TokenStream result = new CJKWidthFilter(source);
         result = new LowerCaseFilter(matchVersion, result);
         result = new CJKBigramFilter(result);
-        result = new CJKLastUniGramFilter(result);
+        result = new CJKLastUniGramFilter(result, tokenizeLastUni);
         return new TokenStreamComponents(source, new StopFilter(matchVersion, result, stopwords));
     }
 }

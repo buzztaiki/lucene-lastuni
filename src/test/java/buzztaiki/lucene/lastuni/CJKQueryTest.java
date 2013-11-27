@@ -75,7 +75,7 @@ public class CJKQueryTest extends LuceneTestCase {
         super.setUp();
         dir = new RAMDirectory();
         analyzer = new CJKLastUniGramAnalyzer(TEST_VERSION_CURRENT, false);
-        uniAnalyzer = new CJKLastUniGramAnalyzer(TEST_VERSION_CURRENT);
+        uniAnalyzer = new CJKLastUniGramAnalyzer(TEST_VERSION_CURRENT, true);
     }
 
     @Override

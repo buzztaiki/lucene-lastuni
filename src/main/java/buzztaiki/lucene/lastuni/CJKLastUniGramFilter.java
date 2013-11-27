@@ -49,10 +49,6 @@ public final class CJKLastUniGramFilter extends TokenFilter {
     private String lastType;
     private boolean tokenizeLastUni;
 
-    public CJKLastUniGramFilter(TokenStream input) {
-        this(input, true);
-    }
-
     public CJKLastUniGramFilter(TokenStream input, boolean tokenizeLastUni) {
         super(input);
         _reset();

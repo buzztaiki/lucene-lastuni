@@ -30,7 +30,7 @@ public class CJKLastUniGramFilterTest extends BaseTokenStreamTestCase {
     private static CJKLastUniGramFilter newFilter(String str) {
         TokenStream ts = new StandardTokenizer(TEST_VERSION_CURRENT, new StringReader(str));
         ts = new CJKBigramFilter(ts);
-        return new CJKLastUniGramFilter(ts);
+        return new CJKLastUniGramFilter(ts, true);
     }
 
     public void testSingleWord() throws Exception {
