@@ -3,10 +3,9 @@ package buzztaiki.lucene.lastuni;
 import java.io.IOException;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.cjk.CJKAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
@@ -32,7 +31,7 @@ public class CJKSingleCharQueryTest extends LuceneTestCase {
         doc.add(newTextField("content", content, Field.Store.YES));
         writer.addDocument(doc);
     }
-    
+
     private void addDoc(Directory dir, Analyzer analyzer, String content) throws IOException {
         IndexWriter writer = newWriter(dir, analyzer);
         try {
@@ -53,7 +52,7 @@ public class CJKSingleCharQueryTest extends LuceneTestCase {
     }
 
     private TopDocs search(Directory dir, Analyzer analyzer, String query) throws IOException, ParseException {
-        IndexSearcher searcher = newSearcher(IndexReader.open(dir));
+        IndexSearcher searcher = newSearcher(DirectoryReader.open(dir));
         try {
             QueryParser qp = newQueryParser(analyzer);
             Query q = qp.parse(query);

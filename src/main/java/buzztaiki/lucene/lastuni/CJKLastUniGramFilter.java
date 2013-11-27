@@ -20,7 +20,7 @@ package buzztaiki.lucene.lastuni;
 import java.io.IOException;
 
 import org.apache.lucene.analysis.TokenFilter;
-import org.apache.lucene.analysis.cjk.CJKTokenizer;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
@@ -49,11 +49,11 @@ public final class CJKLastUniGramFilter extends TokenFilter {
     private String lastType;
     private boolean tokenizeLastUni;
 
-    public CJKLastUniGramFilter(CJKTokenizer input) {
+    public CJKLastUniGramFilter(TokenStream input) {
         this(input, true);
     }
 
-    public CJKLastUniGramFilter(CJKTokenizer input, boolean tokenizeLastUni) {
+    public CJKLastUniGramFilter(TokenStream input, boolean tokenizeLastUni) {
         super(input);
         _reset();
         this.tokenizeLastUni = tokenizeLastUni;

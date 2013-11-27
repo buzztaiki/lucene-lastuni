@@ -9,7 +9,7 @@ import org.apache.lucene.search.PrefixQuery;
  */
 public final class CJKSingleCharQuery {
     private CJKSingleCharQuery() {}
-    
+
     /**
      * Return true if term is CJK single character.
      */

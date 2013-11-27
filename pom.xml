@@ -35,6 +35,10 @@
         <configuration>
           <source>1.7</source>
           <target>1.7</target>
+          <fork>true</fork>
+          <compilerArgs>
+             <arg>-Xlint:all</arg>
+          </compilerArgs>
         </configuration>
       </plugin>
       <plugin>

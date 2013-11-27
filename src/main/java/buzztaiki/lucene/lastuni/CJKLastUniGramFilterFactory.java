@@ -20,7 +20,6 @@ package buzztaiki.lucene.lastuni;
 import java.util.Map;
 
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.cjk.CJKTokenizer;
 import org.apache.lucene.analysis.util.TokenFilterFactory;
 
 /**
@@ -30,9 +29,13 @@ import org.apache.lucene.analysis.util.TokenFilterFactory;
  * <pre>
  * &lt;fieldType name="text_cjk" class="solr.TextField" positionIncrementGap="100"&gt;
  *   &lt;analyzer&gt;
- *     &lt;tokenizer class="solr.CJKTokenizerFactory"/&gt;
- *     &lt;filter class="buzztaiki.lucene.lastuni.CJKLastUniGramFilterFactory"/&gt;
+ *     &lt;tokenizer class="solr.StandardTokenizerFactory"/&gt;
+ *     &lt;filter class="solr.CJKWidthFilterFactory"/&gt;
  *     &lt;filter class="solr.LowerCaseFilterFactory"/&gt;
+ *     &lt;filter class="solr.CJKBigramFilterFactory"
+ *       han="true" hiragana="true"
+ *       katakana="true" hangul="true" outputUnigrams="false" /&gt;
+ *     &lt;filter class="buzztaiki.lucene.lastuni.CJKLastUniGramFilterFactory"/&gt;
  *   &lt;/analyzer&gt;
  * &lt;/fieldType&gt;
  * </pre>
@@ -44,9 +47,6 @@ public final class CJKLastUniGramFilterFactory extends TokenFilterFactory {
 
     @Override
     public CJKLastUniGramFilter create(TokenStream in) {
-        if (!(in instanceof CJKTokenizer)) {
-            throw new IllegalArgumentException("Intput token stream should be CJKTokenizer");
-        }
-        return new CJKLastUniGramFilter((CJKTokenizer) in);
+        return new CJKLastUniGramFilter(in);
     }
 }

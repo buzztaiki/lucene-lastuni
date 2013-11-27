@@ -18,23 +18,27 @@ package buzztaiki.lucene.lastuni;
  */
 
 import java.io.Reader;
-import java.util.Set;
 
-import java.io.IOException;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.cjk.CJKAnalyzer;
-import org.apache.lucene.analysis.cjk.CJKTokenizer;
+import org.apache.lucene.analysis.cjk.CJKBigramFilter;
+import org.apache.lucene.analysis.cjk.CJKWidthFilter;
+import org.apache.lucene.analysis.core.LowerCaseFilter;
 import org.apache.lucene.analysis.core.StopFilter;
+import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.analysis.util.StopwordAnalyzerBase;
 import org.apache.lucene.util.Version;
 
 
 /**
- * An {@link Analyzer} that tokenizes text with {@link CJKTokenizer} and
- * filters with {@link CJKLastUniGramFilter} and {@link StopFilter}
- *
+ * An {@link Analyzer} that tokenizes text with {@link StandardTokenizer},
+ * normalizes content with {@link CJKWidthFilter}, folds case with
+ * {@link LowerCaseFilter}, forms bigrams of CJK with {@link CJKBigramFilter},
+ * split last bigram terms with {@link CJKLastUniGramFilter}, and filters
+ * stopwords with {@link StopFilter}
  */
 public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
     private boolean tokenizeLastUni = true;
@@ -45,10 +49,10 @@ public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
     public CJKLastUniGramAnalyzer(Version matchVersion) {
         this(matchVersion, CJKAnalyzer.getDefaultStopSet());
     }
-  
+
     /**
      * Builds an analyzer with the given stop words
-     * 
+     *
      * @param matchVersion
      *          lucene compatibility version
      * @param stopwords
@@ -60,8 +64,8 @@ public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
 
 
     /**
-     * Builds an analyzer with the given stop words
-     * 
+     * Builds an analyzer which removes words in {@link CJKAnalyzer#getDefaultStopSet()}.
+     *
      * @param matchVersion
      *          lucene compatibility version
      * @param tokenizeLastUni
@@ -73,7 +77,7 @@ public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
 
     /**
      * Builds an analyzer with the given stop words
-     * 
+     *
      * @param matchVersion
      *          lucene compatibility version
      * @param stopwords
@@ -90,9 +94,11 @@ public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
 
     @Override
     protected TokenStreamComponents createComponents(String fieldName, Reader reader) {
-        CJKTokenizer source = new CJKTokenizer(reader);
-        return new TokenStreamComponents(
-            source,
-            new StopFilter(matchVersion, new CJKLastUniGramFilter(source, tokenizeLastUni), stopwords));
+        final Tokenizer source = new StandardTokenizer(matchVersion, reader);
+        TokenStream result = new CJKWidthFilter(source);
+        result = new LowerCaseFilter(matchVersion, result);
+        result = new CJKBigramFilter(result);
+        result = new CJKLastUniGramFilter(result);
+        return new TokenStreamComponents(source, new StopFilter(matchVersion, result, stopwords));
     }
 }
