@@ -19,23 +19,21 @@ package buzztaiki.lucene.lastuni;
 import java.io.IOException;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.cjk.CJKAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.LuceneTestCase;
-import org.apache.lucene.util.Version;
 
 public class CJKSingleCharQueryTest extends LuceneTestCase {
     private IndexWriter newWriter(Directory dir, Analyzer analyzer) throws IOException {
@@ -46,10 +44,10 @@ public class CJKSingleCharQueryTest extends LuceneTestCase {
 
     private void addDoc(IndexWriter writer, String content) throws IOException {
         Document doc = new Document();
-        doc.add(newField("content", content, Field.Store.YES, Field.Index.ANALYZED));
+        doc.add(newTextField("content", content, Field.Store.YES));
         writer.addDocument(doc);
     }
-    
+
     private void addDoc(Directory dir, Analyzer analyzer, String content) throws IOException {
         IndexWriter writer = newWriter(dir, analyzer);
         try {
@@ -61,6 +59,7 @@ public class CJKSingleCharQueryTest extends LuceneTestCase {
     }
 
     private QueryParser newQueryParser(Analyzer analyzer) {
+        // TODO: use flexible parser?
         QueryParser qp = new CJKSingleCharSupportQueryParser(TEST_VERSION_CURRENT, "content", analyzer);
         qp.setDefaultOperator(QueryParser.AND_OPERATOR);
         qp.setAutoGeneratePhraseQueries(true);
@@ -69,13 +68,13 @@ public class CJKSingleCharQueryTest extends LuceneTestCase {
     }
 
     private TopDocs search(Directory dir, Analyzer analyzer, String query) throws IOException, ParseException {
-        IndexSearcher searcher = newSearcher(IndexReader.open(dir));
+        IndexSearcher searcher = newSearcher(DirectoryReader.open(dir));
         try {
             QueryParser qp = newQueryParser(analyzer);
             Query q = qp.parse(query);
             return searcher.search(q, 10);
         } finally {
-            searcher.close();
+            searcher.getIndexReader().close();
         }
     }
 
@@ -89,7 +88,7 @@ public class CJKSingleCharQueryTest extends LuceneTestCase {
         super.setUp();
         dir = new RAMDirectory();
         analyzer = new CJKLastUniGramAnalyzer(TEST_VERSION_CURRENT, false);
-        uniAnalyzer = new CJKLastUniGramAnalyzer(TEST_VERSION_CURRENT);
+        uniAnalyzer = new CJKLastUniGramAnalyzer(TEST_VERSION_CURRENT, true);
     }
 
     @Override

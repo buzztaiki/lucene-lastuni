@@ -20,13 +20,20 @@ import java.io.StringReader;
 
 import org.apache.lucene.analysis.BaseTokenStreamTestCase;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.cjk.CJKTokenizer;
+import org.apache.lucene.analysis.cjk.CJKBigramFilter;
+import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 
 public class CJKLastUniGramFilterForSearchTest extends BaseTokenStreamTestCase {
+    private static CJKLastUniGramFilter newFilter(String str) {
+        TokenStream ts = new StandardTokenizer(TEST_VERSION_CURRENT, new StringReader(str));
+        ts = new CJKBigramFilter(ts);
+        return new CJKLastUniGramFilter(ts, false);
+    }
+
     public void testSingleWord() throws Exception {
-        TokenStream ts = new CJKLastUniGramFilter(new CJKTokenizer(new StringReader("あいうえお")), false);
+        TokenStream ts = newFilter("あいうえお");
         assertTokenStreamContents(ts,
             new String[]{"あい", "いう", "うえ", "えお"},
             new int[]   {0,      1,      2,      3},
@@ -35,7 +42,7 @@ public class CJKLastUniGramFilterForSearchTest extends BaseTokenStreamTestCase {
         );
     }
     public void testMultiWord() throws Exception {
-        TokenStream ts = new CJKLastUniGramFilter(new CJKTokenizer(new StringReader("あい う えお")), false);
+        TokenStream ts = newFilter("あい う えお");
         assertTokenStreamContents(ts,
             new String[]{"あい", "い", "う", "えお"},
             new int[]   {0,      1,    3,    5},
@@ -45,7 +52,7 @@ public class CJKLastUniGramFilterForSearchTest extends BaseTokenStreamTestCase {
     }
 
     public void testSingleChar() throws Exception {
-        TokenStream ts = new CJKLastUniGramFilter(new CJKTokenizer(new StringReader("あ")), false);
+        TokenStream ts = newFilter("あ");
         assertTokenStreamContents(ts,
             new String[]{"あ"},
             new int[]   {0},
@@ -55,7 +62,7 @@ public class CJKLastUniGramFilterForSearchTest extends BaseTokenStreamTestCase {
     }
 
     public void testSingleToken() throws Exception {
-        TokenStream ts = new CJKLastUniGramFilter(new CJKTokenizer(new StringReader("あい")), false);
+        TokenStream ts = newFilter("あい");
         assertTokenStreamContents(ts,
             new String[]{"あい"},
             new int[]   {0},
@@ -65,7 +72,7 @@ public class CJKLastUniGramFilterForSearchTest extends BaseTokenStreamTestCase {
     }
 
     public void testAsciiAndCJK() throws Exception {
-        TokenStream ts = new CJKLastUniGramFilter(new CJKTokenizer(new StringReader("あいabcうえお")), false);
+        TokenStream ts = newFilter("あいabcうえお");
         assertTokenStreamContents(ts,
             new String[]{"あい", "い", "abc", "うえ", "えお"},
             new int[]   {0,      1,    2,     5,      6},
@@ -75,7 +82,7 @@ public class CJKLastUniGramFilterForSearchTest extends BaseTokenStreamTestCase {
     }
 
     public void testSingleTokenTwice() throws Exception {
-        TokenStream ts = new CJKLastUniGramFilter(new CJKTokenizer(new StringReader("あい うえ")), false);
+        TokenStream ts = newFilter("あい うえ");
         assertTokenStreamContents(ts,
             new String[]{"あい", "い", "うえ"},
             new int[]   {0,      1,    3},

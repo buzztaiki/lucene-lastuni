@@ -19,7 +19,8 @@ package buzztaiki.lucene.lastuni;
 import java.io.IOException;
 
 import org.apache.lucene.analysis.TokenFilter;
-import org.apache.lucene.analysis.cjk.CJKTokenizer;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.cjk.CJKBigramFilter;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
@@ -35,8 +36,6 @@ public final class CJKLastUniGramFilter extends TokenFilter {
         INHERIT, UNIGRAM, LAST
     }
 
-    private static final String DOUBLE_TYPE = "double";
-
     private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
     private final OffsetAttribute offsetAtt = addAttribute(OffsetAttribute.class);
     private final TypeAttribute typeAtt = addAttribute(TypeAttribute.class);
@@ -48,11 +47,7 @@ public final class CJKLastUniGramFilter extends TokenFilter {
     private String lastType;
     private boolean tokenizeLastUni;
 
-    public CJKLastUniGramFilter(CJKTokenizer input) {
-        this(input, true);
-    }
-
-    public CJKLastUniGramFilter(CJKTokenizer input, boolean tokenizeLastUni) {
+    public CJKLastUniGramFilter(TokenStream input, boolean tokenizeLastUni) {
         super(input);
         _reset();
         this.tokenizeLastUni = tokenizeLastUni;
@@ -76,14 +71,14 @@ public final class CJKLastUniGramFilter extends TokenFilter {
             int end = offsetAtt.endOffset();
             String type = typeAtt.type();
 
-            if (lastType.equals(DOUBLE_TYPE)
+            if (lastType.equals(CJKBigramFilter.DOUBLE_TYPE)
                     && lastEnd - lastStart >= 2
                     && (!cont && tokenizeLastUni || start >= lastEnd)) {
                 state = (cont ? State.UNIGRAM : State.LAST);
                 clearAttributes();
                 termAtt.copyBuffer(lastBuffer, lastEnd-lastStart-1, 1);
                 offsetAtt.setOffset(lastEnd-1, lastEnd);
-                typeAtt.setType(DOUBLE_TYPE);
+                typeAtt.setType(CJKBigramFilter.DOUBLE_TYPE);
                 setLastValues(buffer, start, end, type);
             } else {
                 if (!cont) {

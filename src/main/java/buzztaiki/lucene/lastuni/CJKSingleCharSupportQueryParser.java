@@ -18,14 +18,15 @@ package buzztaiki.lucene.lastuni;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
 
+// TODO: use flexible parser?
+
 /**
- * A QueryParser that support {@link CJKSingleCharQuery}.
+ * A QueryParser that support CJK single character.
  *
- * @see CJKSingleCharQuery
  * @see QueryParser
  */
 public class CJKSingleCharSupportQueryParser extends QueryParser {

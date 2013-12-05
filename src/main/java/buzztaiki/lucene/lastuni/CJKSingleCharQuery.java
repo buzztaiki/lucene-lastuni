@@ -19,14 +19,15 @@ package buzztaiki.lucene.lastuni;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.PrefixQuery;
-import org.apache.lucene.queryParser.QueryParser;
 
 /**
  * A query that matches CJK single character.
+ *
+ * @see CJKSingleCharSupportQueryParser
  */
 public final class CJKSingleCharQuery {
     private CJKSingleCharQuery() {}
-    
+
     /**
      * Return true if term is CJK single character.
      */

@@ -19,9 +19,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>buzztaiki.lucene.lastuni</groupId>
+  <groupId>buzztaiki</groupId>
   <artifactId>lucene-lastuni</artifactId>
-  <version>1.4-SNAPSHOT</version>
+  <version>4.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>lucene-lastuni</name>
@@ -29,7 +29,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <lucene.version>3.6.2</lucene.version>
+    <lucene.version>4.6.0</lucene.version>
+    <lucene.version._>4_6_0</lucene.version._>
   </properties>
 
   <scm>
@@ -45,15 +46,27 @@
     </license>
   </licenses>
 
+  <repositories>
+    <repository>
+      <id>maven-restlet</id>
+      <name>Public online Restlet repository</name>
+      <url>http://maven.restlet.org</url>
+    </repository>
+  </repositories>
+
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
+        <version>3.1</version>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>1.7</source>
+          <target>1.7</target>
+          <fork>true</fork>
+          <compilerArgs>
+             <arg>-Xlint:all</arg>
+          </compilerArgs>
         </configuration>
       </plugin>
       <plugin>
@@ -72,7 +85,14 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.9</version>
+        <version>2.9.1</version>
+        <configuration>
+          <links>
+            <link>http://lucene.apache.org/core/${lucene.version._}/core/</link>
+            <link>http://lucene.apache.org/core/${lucene.version._}/analyzers-common/</link>
+            <link>http://lucene.apache.org/core/${lucene.version._}/queryparser/</link>
+          </links>
+        </configuration>
         <executions>
           <execution>
             <id>attach-javadocs</id>
@@ -90,6 +110,13 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-test-framework</artifactId>
+      <version>${lucene.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.lucene</groupId>
@@ -98,14 +125,13 @@
     </dependency>
     <dependency>
       <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-analyzers</artifactId>
+      <artifactId>lucene-analyzers-common</artifactId>
       <version>${lucene.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-test-framework</artifactId>
+      <artifactId>lucene-queryparser</artifactId>
       <version>${lucene.version}</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.solr</groupId>
