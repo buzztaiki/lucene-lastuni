@@ -21,7 +21,7 @@
 
   <groupId>buzztaiki</groupId>
   <artifactId>lucene-lastuni</artifactId>
-  <version>4.0</version>
+  <version>4.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>lucene-lastuni</name>
@@ -35,7 +35,7 @@
 
   <scm>
     <connection>scm:git:git@github.com:buzztaiki/lucene-lastuni.git</connection>
-    <tag>lucene-lastuni-4.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <licenses>
