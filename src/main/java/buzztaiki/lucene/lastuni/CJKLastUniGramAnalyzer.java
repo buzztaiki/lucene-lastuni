@@ -38,6 +38,12 @@ import org.apache.lucene.util.Version;
  * {@link LowerCaseFilter}, forms bigrams of CJK with {@link CJKBigramFilter},
  * split last bigram terms with {@link CJKLastUniGramFilter}, and filters
  * stopwords with {@link StopFilter}
+ *
+ * <p>An example as below:
+ * <pre>
+ * CJKLastUniGramAnalyzer queryAnalyzer = new CJKLastUniGramAnalyzer(Version.LUCENE_CURRENT, false);
+ * CJKLastUniGramAnalyzer indexAnalyzer = new CJKLastUniGramAnalyzer(Version.LUCENE_CURRENT, true);
+ * </pre>
  */
 public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
     private final boolean tokenizeLastUni;

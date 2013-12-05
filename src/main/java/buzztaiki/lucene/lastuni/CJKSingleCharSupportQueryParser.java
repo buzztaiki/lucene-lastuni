@@ -22,12 +22,12 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
 
+// TODO: use flexible parser?
+
 /**
- * A QueryParser that support {@link CJKSingleCharQuery}.
+ * A QueryParser that support CJK single character.
  *
- * @see CJKSingleCharQuery
  * @see QueryParser
- * @todo use flexible parser?
  */
 public class CJKSingleCharSupportQueryParser extends QueryParser {
     public CJKSingleCharSupportQueryParser(Version matchVersion, String f, Analyzer a) {

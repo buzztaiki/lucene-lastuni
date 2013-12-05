@@ -22,6 +22,8 @@ import org.apache.lucene.search.PrefixQuery;
 
 /**
  * A query that matches CJK single character.
+ *
+ * @see CJKSingleCharSupportQueryParser
  */
 public final class CJKSingleCharQuery {
     private CJKSingleCharQuery() {}
