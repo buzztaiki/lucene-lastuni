@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package buzztaiki.lucene.lastuni;
+package com.github.buzztaiki.lucene.lastuni;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.Term;

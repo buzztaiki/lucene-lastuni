@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package buzztaiki.lucene.lastuni;
+package com.github.buzztaiki.lucene.lastuni;
 
 import java.io.IOException;
 import java.util.Map;
@@ -35,7 +35,7 @@ import org.apache.lucene.analysis.util.TokenFilterFactory;
  *     &lt;filter class="solr.CJKBigramFilterFactory"
  *       han="true" hiragana="true"
  *       katakana="true" hangul="true" outputUnigrams="false"/&gt;
- *     &lt;filter class="buzztaiki.lucene.lastuni.CJKLastUniGramFilterFactory"
+ *     &lt;filter class="com.github.buzztaiki.lucene.lastuni.CJKLastUniGramFilterFactory"
  *       tokenizeLastUni="true"/&gt;
  *   &lt;/analyzer&gt;
  *   &lt;analyzer type="query"&gt;
@@ -45,7 +45,7 @@ import org.apache.lucene.analysis.util.TokenFilterFactory;
  *     &lt;filter class="solr.CJKBigramFilterFactory"
  *       han="true" hiragana="true"
  *       katakana="true" hangul="true" outputUnigrams="false"/&gt;
- *     &lt;filter class="buzztaiki.lucene.lastuni.CJKLastUniGramFilterFactory"
+ *     &lt;filter class="com.github.buzztaiki.lucene.lastuni.CJKLastUniGramFilterFactory"
  *       tokenizeLastUni="false"/&gt;
  *   &lt;/analyzer&gt;
  * &lt;/fieldType&gt;
