@@ -9,8 +9,7 @@ description: Lucene CJK analyzer that tokenize last character as uni-gram.
 
 * [Github](https://github.com/buzztaiki/lucene-lastuni)
 * [Travis CI](https://travis-ci.org/buzztaiki/lucene-lastuni)
-* [Javadoc](/apidocs/)
-<!-- why apidocs page makes 404? -->
+* [Javadoc](/apidocs/) -- why apidocs page makes 404?
 
 
 ## Downloads
