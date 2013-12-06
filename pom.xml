@@ -44,6 +44,8 @@
 
   <scm>
     <connection>scm:git:git@github.com:buzztaiki/lucene-lastuni.git</connection>
+    <developerConnection>scm:git:git@github.com:buzztaiki/lucene-lastuni.git</developerConnection>
+    <url>git@github.com:buzztaiki/lucene-lastuni.git</url>
     <tag>HEAD</tag>
   </scm>
 
