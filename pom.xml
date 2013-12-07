@@ -27,7 +27,7 @@
 
   <groupId>com.github.buzztaiki</groupId>
   <artifactId>lucene-lastuni</artifactId>
-  <version>4.2-SNAPSHOT</version>
+  <version>4.2</version>
   <packaging>jar</packaging>
 
   <name>lucene-lastuni</name>
