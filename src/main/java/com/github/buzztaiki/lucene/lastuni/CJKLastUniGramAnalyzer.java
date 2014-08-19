@@ -37,7 +37,7 @@ import org.apache.lucene.util.Version;
  * normalizes content with {@link CJKWidthFilter}, folds case with
  * {@link LowerCaseFilter}, forms bigrams of CJK with {@link CJKBigramFilter},
  * split last bigram terms with {@link CJKLastUniGramFilter}, and filters
- * stopwords with {@link StopFilter}
+ * stopwords with {@link StopFilter}.
  *
  * <p>An example as below:
  * <pre>
