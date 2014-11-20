@@ -36,6 +36,9 @@ public final class CJKLastUniGramFilter extends TokenFilter {
         INHERIT, UNIGRAM, LAST
     }
 
+    // for backword compatibility
+    private static final String OLD_DOUBLE_TYPE = "double";
+
     private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
     private final OffsetAttribute offsetAtt = addAttribute(OffsetAttribute.class);
     private final TypeAttribute typeAtt = addAttribute(TypeAttribute.class);
@@ -71,14 +74,14 @@ public final class CJKLastUniGramFilter extends TokenFilter {
             int end = offsetAtt.endOffset();
             String type = typeAtt.type();
 
-            if (lastType.equals(CJKBigramFilter.DOUBLE_TYPE)
+            if ((lastType.equals(CJKBigramFilter.DOUBLE_TYPE) || lastType.equals(OLD_DOUBLE_TYPE))
                     && lastEnd - lastStart >= 2
                     && (!cont && tokenizeLastUni || start >= lastEnd)) {
                 state = (cont ? State.UNIGRAM : State.LAST);
                 clearAttributes();
                 termAtt.copyBuffer(lastBuffer, lastEnd-lastStart-1, 1);
                 offsetAtt.setOffset(lastEnd-1, lastEnd);
-                typeAtt.setType(CJKBigramFilter.DOUBLE_TYPE);
+                typeAtt.setType(lastType);
                 setLastValues(buffer, start, end, type);
             } else {
                 if (!cont) {
