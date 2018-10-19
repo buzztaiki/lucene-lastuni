@@ -27,8 +27,9 @@ import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 
 public class CJKLastUniGramFilterForSearchTest extends BaseTokenStreamTestCase {
     private static CJKLastUniGramFilter newFilter(String str) {
-        TokenStream ts = new StandardTokenizer(TEST_VERSION_CURRENT, new StringReader(str));
-        ts = new CJKBigramFilter(ts);
+        StandardTokenizer tokenizer = new StandardTokenizer();
+	tokenizer.setReader(new StringReader(str));
+        TokenStream ts = new CJKBigramFilter(tokenizer);
         return new CJKLastUniGramFilter(ts, false);
     }
 

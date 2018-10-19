@@ -18,7 +18,10 @@ package com.github.buzztaiki.lucene.lastuni;
 
 import java.io.Reader;
 
+import org.apache.lucene.analysis.Analyzer.TokenStreamComponents;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.CharArraySet;
+import org.apache.lucene.analysis.StopwordAnalyzerBase;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.cjk.CJKAnalyzer;
@@ -27,9 +30,6 @@ import org.apache.lucene.analysis.cjk.CJKWidthFilter;
 import org.apache.lucene.analysis.core.LowerCaseFilter;
 import org.apache.lucene.analysis.core.StopFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
-import org.apache.lucene.analysis.util.CharArraySet;
-import org.apache.lucene.analysis.util.StopwordAnalyzerBase;
-import org.apache.lucene.util.Version;
 
 
 /**
@@ -41,8 +41,8 @@ import org.apache.lucene.util.Version;
  *
  * <p>An example as below:
  * <pre>
- * CJKLastUniGramAnalyzer queryAnalyzer = new CJKLastUniGramAnalyzer(Version.LUCENE_CURRENT, false);
- * CJKLastUniGramAnalyzer indexAnalyzer = new CJKLastUniGramAnalyzer(Version.LUCENE_CURRENT, true);
+ * CJKLastUniGramAnalyzer queryAnalyzer = new CJKLastUniGramAnalyzer(false);
+ * CJKLastUniGramAnalyzer indexAnalyzer = new CJKLastUniGramAnalyzer(true);
  * </pre>
  */
 public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
@@ -51,39 +51,35 @@ public final class CJKLastUniGramAnalyzer extends StopwordAnalyzerBase {
     /**
      * Builds an analyzer which removes words in {@link CJKAnalyzer#getDefaultStopSet()}.
      *
-     * @param matchVersion
-     *          lucene compatibility version
      * @param tokenizeLastUni
      *          flag to tokenize last charcter. set this to false when search
      */
-    public CJKLastUniGramAnalyzer(Version matchVersion, boolean tokenizeLastUni){
-        this(matchVersion, CJKAnalyzer.getDefaultStopSet(), tokenizeLastUni);
+    public CJKLastUniGramAnalyzer(boolean tokenizeLastUni){
+        this(CJKAnalyzer.getDefaultStopSet(), tokenizeLastUni);
     }
 
     /**
      * Builds an analyzer with the given stop words
      *
-     * @param matchVersion
-     *          lucene compatibility version
      * @param stopwords
      *          a stopword set
      * @param tokenizeLastUni
      *          flag to tokenize last charcter. set this to false when search
      */
-    public CJKLastUniGramAnalyzer(Version matchVersion, CharArraySet stopwords, boolean tokenizeLastUni){
-        super(matchVersion, stopwords);
+    public CJKLastUniGramAnalyzer(CharArraySet stopwords, boolean tokenizeLastUni){
+        super(stopwords);
         this.tokenizeLastUni = tokenizeLastUni;
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    protected TokenStreamComponents createComponents(String fieldName, Reader reader) {
-        final Tokenizer source = new StandardTokenizer(matchVersion, reader);
+    protected TokenStreamComponents createComponents(String fieldName) {
+        final Tokenizer source = new StandardTokenizer();
         TokenStream result = new CJKWidthFilter(source);
-        result = new LowerCaseFilter(matchVersion, result);
+        result = new LowerCaseFilter(result);
         result = new CJKBigramFilter(result);
         result = new CJKLastUniGramFilter(result, tokenizeLastUni);
-        return new TokenStreamComponents(source, new StopFilter(matchVersion, result, stopwords));
+        return new TokenStreamComponents(source, new StopFilter(result, stopwords));
     }
 }

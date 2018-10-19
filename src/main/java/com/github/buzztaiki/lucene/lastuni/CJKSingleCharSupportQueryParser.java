@@ -20,7 +20,6 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.util.Version;
 
 // TODO: use flexible parser?
 
@@ -30,8 +29,8 @@ import org.apache.lucene.util.Version;
  * @see QueryParser
  */
 public class CJKSingleCharSupportQueryParser extends QueryParser {
-    public CJKSingleCharSupportQueryParser(Version matchVersion, String f, Analyzer a) {
-        super(matchVersion, f, a);
+    public CJKSingleCharSupportQueryParser(String f, Analyzer a) {
+        super(f, a);
     }
 
     @Override
