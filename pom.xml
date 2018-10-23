@@ -38,8 +38,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <lucene.version>4.9.0</lucene.version>
-    <lucene.version._>4_9_0</lucene.version._>
+    <lucene.version>7.5.0</lucene.version>
+    <lucene.version._>7_5_0</lucene.version._>
   </properties>
 
   <scm>

@@ -29,7 +29,8 @@ public final class CJKSingleCharQuery {
     private CJKSingleCharQuery() {}
 
     /**
-     * Return true if term is CJK single character.
+     * @param term a term.
+     * @return true if term is CJK single character, false otherwise.
      */
     public static boolean allowed(Term term) {
         if (term.text().length() != 1) {
@@ -44,7 +45,8 @@ public final class CJKSingleCharQuery {
     }
 
     /**
-     * Return query that searches CJK single character.
+     * @param term a term.
+     * @return query that searches CJK single character of term.
      * @throws IllegalArgumentException If term is not single CJK character.
      */
     public static Query of(Term term) throws IllegalArgumentException {

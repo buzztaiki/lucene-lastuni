@@ -23,8 +23,8 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
@@ -32,13 +32,12 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.LuceneTestCase;
 
 public class CJKSingleCharQueryTest extends LuceneTestCase {
     private IndexWriter newWriter(Directory dir, Analyzer analyzer) throws IOException {
         return new IndexWriter(dir,
-            new IndexWriterConfig(TEST_VERSION_CURRENT, analyzer)
+            new IndexWriterConfig(analyzer)
             .setOpenMode(OpenMode.CREATE));
     }
 
@@ -60,8 +59,9 @@ public class CJKSingleCharQueryTest extends LuceneTestCase {
 
     private QueryParser newQueryParser(Analyzer analyzer) {
         // TODO: use flexible parser?
-        QueryParser qp = new CJKSingleCharSupportQueryParser(TEST_VERSION_CURRENT, "content", analyzer);
+        QueryParser qp = new CJKSingleCharSupportQueryParser("content", analyzer);
         qp.setDefaultOperator(QueryParser.AND_OPERATOR);
+        qp.setSplitOnWhitespace(true);
         qp.setAutoGeneratePhraseQueries(true);
         qp.setAllowLeadingWildcard(true);
         return qp;
@@ -79,16 +79,16 @@ public class CJKSingleCharQueryTest extends LuceneTestCase {
     }
 
 
-    private RAMDirectory dir;
+    private Directory dir;
     private CJKLastUniGramAnalyzer analyzer;
     private CJKLastUniGramAnalyzer uniAnalyzer;
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        dir = new RAMDirectory();
-        analyzer = new CJKLastUniGramAnalyzer(TEST_VERSION_CURRENT, false);
-        uniAnalyzer = new CJKLastUniGramAnalyzer(TEST_VERSION_CURRENT, true);
+        dir = newDirectory();
+        analyzer = new CJKLastUniGramAnalyzer(false);
+        uniAnalyzer = new CJKLastUniGramAnalyzer(true);
     }
 
     @Override
