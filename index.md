@@ -2,9 +2,9 @@
 layout: default
 title: Lucene LastUni
 description: Lucene CJK analyzer that tokenize last character as uni-gram.
-content_url: https://oss.sonatype.org/service/local/repositories/releases/content/com/github/buzztaiki/lucene-lastuni/4.3
-archive_url: https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/buzztaiki/lucene-lastuni/4.3
-artifact_name: lucene-lastuni-4.3
+content_url: https://oss.sonatype.org/service/local/repositories/releases/content/com/github/buzztaiki/lucene-lastuni/7.0.1
+archive_url: https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/buzztaiki/lucene-lastuni/7.0.1
+artifact_name: lucene-lastuni-7.0.1
 
 ---
 
